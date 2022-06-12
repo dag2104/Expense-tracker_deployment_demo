@@ -1,40 +1,31 @@
-import Card from "../UI/Card";
-import { useState } from "react";
-import ExpenseItem from "./ExpenseItem";
-import "./Expenses.css";
-import ExpensesFilter from "./ExpensesFilter";
+import React, { useState } from 'react';
+
+import Card from '../UI/Card';
+import ExpensesFilter from './ExpensesFilter';
+import ExpensesList from './ExpensesList';
+import ExpensesChart from './ExpensesChart';
+import './Expenses.css';
+
 const Expenses = (props) => {
-  const [filterYear, setFilteredYear] = useState("2020");
+  const [filteredYear, setFilteredYear] = useState('2020');
 
   const filterChangeHandler = (selectedYear) => {
     setFilteredYear(selectedYear);
   };
 
   const filteredExpenses = props.items.filter((expense) => {
-    return expense.date.getFullYear().toString() === filterYear;
+    return expense.date.getFullYear().toString() === filteredYear;
   });
-  let expensesCotent = <p style={{ color: "red" }}>No expense </p>;
-  if (filteredExpenses.length > 0) {
-    expensesCotent = filteredExpenses.map((expense) => (
-      <ExpenseItem
-        key={expense.id}
-        title={expense.title}
-        amount={expense.amount}
-        date={expense.date}
-      />
-    ));
-  }
+
   return (
     <div>
-      <Card className="expenses">
+      <Card className='expenses'>
         <ExpensesFilter
-          selected={filterYear}
+          selected={filteredYear}
           onChangeFilter={filterChangeHandler}
         />
-
-        {/* filteredExpenses.length === 0 &&  <p>No expense </p>
-        if first condition is met js will output second statemnt  */}
-        {expensesCotent}
+        <ExpensesChart expenses={filteredExpenses} />
+        <ExpensesList items={filteredExpenses} />
       </Card>
     </div>
   );
